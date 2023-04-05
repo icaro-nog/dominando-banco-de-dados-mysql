@@ -1,0 +1,1 @@
+delete from tb_pessoas where idpessoa in(select idpessoa from tb_pessoas where desnome like "J%");
