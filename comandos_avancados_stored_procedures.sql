@@ -8,20 +8,20 @@ BEGIN
 	DECLARE vidpessoa INT;
     
     START TRANSACTION;
-    
+																-- se não existir o nome passado por parâmetro, em pdesnome...
     IF NOT EXISTS(SELECT idpessoa FROM tb_pessoas WHERE desnome = pdesnome) THEN
-    
+									-- insira na tb_pessoas o parâmetro passado em pdesnome
 		INSERT INTO tb_pessoas VALUES(NULL, pdesnome, NULL);
-        SET vidpessoa = LAST_INSERT_ID();
+        SET vidpessoa = LAST_INSERT_ID(); -- seta o vidpessoa com o último id de tb_pessoas
         
-	ELSE
+	ELSE -- retorne resultado
     
 		SELECT "Usuário já cadastrado" AS resultado;
-        ROLLBACK;
+        ROLLBACK; -- desfazer qualquer alteração feita no banco, durante a procedure
         
     END IF;
     
-    IF NOT EXISTS(SELECT idpessoa FROM tb_pessoas WHERE idpessoa = vidpessoa) THEN
+    IF NOT EXISTS(SELECT idpessoa FROM tb_funcionarios WHERE idpessoa = vidpessoa) THEN
     
 		INSERT INTO tb_funcionarios VALUES(NULL, vidpessoa, pvlsalario, pdtadmissao);
         
@@ -32,12 +32,12 @@ BEGIN
         
     END IF;
     
-    COMMIT;
-    
-    SELECT "Dados cadastrados com sucesso!" AS resultado;
-    
 END $$
 
 DELIMITER ;
 
-CALL sp_funcionario_save("João", 5000, current_date());
+CALL sp_funcionario_save("Joselito", 5000.00, current_date());
+
+select * from tb_pessoas;
+
+select * from tb_funcionarios;
